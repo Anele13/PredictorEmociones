@@ -1,0 +1,32 @@
+
+
+.image-block {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.image-block_loaded {
+    width: 100px;
+    margin-top: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+
+.file-form {
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+.file-form__files {
+    display: block;
+    margin-top: 2px;
+}
+
+.preview {
+    text-align: center;
+}
+
+.border {
+    border-width:3px !important;
+}
