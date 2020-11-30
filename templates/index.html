@@ -9,12 +9,19 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" ></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="../static/frontend/styles.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.0.2/dist/tfjs-vis.umd.min.js"></script>
 
 </head>
 
 
 
 <body>
+    <div id="banner-error" class="alert alert-warning" role="alert" style="display: none;">
+        <h4 class="alert-heading">Atencion!</h4>
+        <p>Algunos rostros en las imagenes pueden no haber sido identificados correctamente. <strong>Tip: Pruebe con una imagen mas nitida!</strong></p>
+    </div>
+    
     <div class="container">
         <div class="jumbotron">
             <h1>Prediccion con Tensorflow</h1>
@@ -52,7 +59,7 @@
                     </div>
                 </div>
                 <h5 id="resultado" class="card-title" style="display:none">Resultado</h5>
-                <div id="preview" class="col-md-12 shadow-lg p-3 mb-5 bg-white rounded" style="display:none; width:100%; height:500px; overflow: auto;">
+                <div id="preview" class="col-md-12 shadow-lg p-3 mb-5  rounded border border-secondary" style="display:none; width:100%; height:500px; overflow: auto;">
                     
                 </div>
             </div>   
@@ -62,3 +69,4 @@
     </div>
 </body>
 </html>
+

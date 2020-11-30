@@ -6,6 +6,7 @@ import numpy as np
 import io
 from base64 import encodebytes, b64encode
 from PIL import Image
+from flask import make_response, jsonify
 
 app = Flask(__name__)
 
@@ -23,9 +24,12 @@ def prepare():
     file = request.files["file"]
     color = request.form.get('color')
     imagenes = preprocessing(file)
-    for i, imagen in enumerate(imagenes):
-        res[i] =[imagen[0].tolist(), imagen[1], color] #el tensor de imagen y el arrayBytes de imagen.
-    return json.dumps(res)
+    if imagenes:
+        for i, imagen in enumerate(imagenes):
+            res[i] =[imagen[0].tolist(), imagen[1], color] #el tensor de imagen y el arrayBytes de imagen.
+        return json.dumps(res)
+    else:
+        return make_response(jsonify("hay errores"), 404)
 
 
 @app.route('/model')
@@ -64,7 +68,7 @@ def preprocessing(file):
     res = []
     for (x,y,w,h) in faces:
         rostro = imageAux[y:y+h,x:x+w]
-        rostro = cv2.resize(rostro,(350,350), interpolation=cv2.INTER_CUBIC) #definir que tamaño van a tener
+        rostro = cv2.resize(rostro,(48,48), interpolation=cv2.INTER_CUBIC) #definir que tamaño van a tener
         rostroN = cv2.cvtColor(rostro, cv2.COLOR_BGR2GRAY)
         pil_img = Image.fromarray(rostroN) # reads the PIL image
         byte_arr = io.BytesIO()
