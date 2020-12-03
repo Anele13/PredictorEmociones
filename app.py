@@ -10,7 +10,7 @@ from flask import make_response, jsonify
 
 app = Flask(__name__)
 
-CORS(app)
+#CORS(app)
 
 
 @app.route("/", methods=["GET"])
@@ -79,4 +79,4 @@ def preprocessing(file):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
