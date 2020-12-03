@@ -1,6 +1,6 @@
 Flask==1.1.2
 gunicorn==20.0.4
 numpy==1.18.2
-opencv-python
+opencv-python==4.2.0.34
 Pillow
 flask_cors
