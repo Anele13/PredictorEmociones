@@ -1,6 +1,6 @@
 let model;
 
-const modelURL = 'http://localhost:5000/model';
+const modelURL = 'https://immense-beyond-93461.herokuapp.com/model';
 
 const preview = document.getElementById("preview");
 const predictButton = document.getElementById("predict");
@@ -36,7 +36,7 @@ const predict = async (modelURL) => {
         data.append('color',colores[index])
         $($('.image-block')[index]).addClass(colores[index])
 
-        const result = await fetch("/api/prepare",
+        const result = await fetch("https://immense-beyond-93461.herokuapp.com/api/prepare",
             {
                 method: 'POST',
                 body: data
