@@ -10,8 +10,7 @@ from flask import make_response, jsonify
 
 app = Flask(__name__)
 
-#CORS(app)
-
+#CORS(app) #TODO descomentar esto para heroku y permitir peticiones CORS
 
 @app.route("/", methods=["GET"])
 def main():
@@ -29,7 +28,7 @@ def prepare():
             res[i] =[imagen[0].tolist(), imagen[1], color] #el tensor de imagen y el arrayBytes de imagen.
         return json.dumps(res)
     else:
-        return make_response(jsonify("hay errores"), 404)
+        return make_response(jsonify("Errores"), 404)
 
 
 @app.route('/model')
@@ -46,36 +45,28 @@ def load_shards(path):
 def preprocessing(file):
     in_memory_file = io.BytesIO()
     file.save(in_memory_file)
-    #data = np.fromstring(in_memory_file.getvalue(), dtype=np.uint8)
-    #img = cv2.imdecode(data, 0)
-    #res = cv2.resize(img, dsize=(48, 48), interpolation=cv2.INTER_CUBIC)
-    # file.save("static/UPLOAD/img.png") # saving uploaded img
-    # cv2.imwrite("static/UPLOAD/test.png", res) # saving processed image
-    
-    #return res
     faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalface_default.xml')
-
     npimg = np.fromstring(in_memory_file.getvalue(), dtype=np.uint8)
-    # convert numpy array to image
     image = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
-
-    #image = cv2.imread('./Imagenes/s001-04_img.tif')
     imageAux = image.copy()
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces = faceClassif.detectMultiScale(gray, 1.1,5) #este valor puede varias mas o menos de 5 a 12 dependiendo de la calidad de las imagenes
-
     count = 0
     res = []
     for (x,y,w,h) in faces:
         rostro = imageAux[y:y+h,x:x+w]
-        rostro = cv2.resize(rostro,(48,48), interpolation=cv2.INTER_CUBIC) #definir que tamaño van a tener
         rostroN = cv2.cvtColor(rostro, cv2.COLOR_BGR2GRAY)
-        pil_img = Image.fromarray(rostroN) # reads the PIL image
+        rostroN = cv2.convertScaleAbs(rostroN, alpha = 1, beta = 0) 
+        rostroN = cv2.resize(rostroN,(48,48), interpolation=cv2.INTER_CUBIC) #definir que tamaño van a tener
+        X = np.array(rostroN)
+        X = X.astype('float32')
+        X = X / 255
+        pil_img = Image.fromarray(rostroN) # leer la imagen PIL
         byte_arr = io.BytesIO()
-        pil_img.save(byte_arr, format='PNG') # convert the PIL image to byte array
-        encoded_img = encodebytes(byte_arr.getvalue()).decode('ascii') # encode as base64
-        res.append([rostroN, encoded_img])  
-    return res
+        pil_img.save(byte_arr, format='PNG') # convertir la imagen PIL en un byte array
+        encoded_img = encodebytes(byte_arr.getvalue()).decode('ascii') # encodear como base64
+        res.append([X, encoded_img]) 
+    return res   
 
 
 if __name__ == "__main__":
